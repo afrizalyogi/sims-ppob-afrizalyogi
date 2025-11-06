@@ -2,6 +2,7 @@ interface InputProps {
   id?: string;
   name?: string;
   type?: "text" | "password" | "email" | "number" | "hidden" | undefined;
+  value?: string | number | readonly string[];
   placeholder?: string;
   icon?: React.ReactNode;
   error?: string | null | undefined;
@@ -13,6 +14,7 @@ export default function Input({
   id,
   name,
   type,
+  value,
   placeholder,
   icon,
   error,
@@ -37,6 +39,7 @@ export default function Input({
           id={id}
           name={name}
           type={type}
+          value={value}
           placeholder={placeholder}
           disabled={disabled}
           className={`
@@ -45,7 +48,7 @@ export default function Input({
             focus:outline-none focus:ring-2 focus:border-transparent
             ${borderStyle}
             ${icon ? "pl-10" : "pl-3"}
-            ${disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
+            ${disabled ? "bg-gray-50 cursor-not-allowed" : "bg-white"}
             ${className}
           `}
           {...rest}
