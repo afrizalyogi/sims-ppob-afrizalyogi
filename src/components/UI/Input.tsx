@@ -1,6 +1,7 @@
 interface InputProps {
   id?: string;
   name?: string;
+  type?: "text" | "password" | "email" | "number" | "hidden" | undefined;
   placeholder?: string;
   icon?: React.ReactNode;
   error?: string | null | undefined;
@@ -11,6 +12,7 @@ interface InputProps {
 export default function Input({
   id,
   name,
+  type,
   placeholder,
   icon,
   error,
@@ -34,6 +36,7 @@ export default function Input({
         <input
           id={id}
           name={name}
+          type={type}
           placeholder={placeholder}
           disabled={disabled}
           className={`

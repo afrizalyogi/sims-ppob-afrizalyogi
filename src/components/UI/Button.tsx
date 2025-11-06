@@ -1,17 +1,24 @@
+import React from "react";
+
 interface ButtonProps {
+  type?: "submit" | "reset" | "button" | undefined;
   disabled?: boolean;
   className?: string;
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function Button({
+  type,
   disabled = false,
   className,
   isLoading = false,
+  children,
   ...rest
 }: ButtonProps) {
   return (
     <button
+      type={type}
       disabled={disabled || isLoading}
       className={`
         group relative w-full flex justify-center py-3 px-4 border border-transparent
@@ -22,6 +29,8 @@ export default function Button({
         ${className}
       `}
       {...rest}
-    ></button>
+    >
+      {children}
+    </button>
   );
 }
