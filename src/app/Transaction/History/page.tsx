@@ -70,14 +70,14 @@ export default function History() {
         userName={userName}
         balance={balance}
       />
-      <div className="mt-8 rounded-lg bg-white p-6 shadow-md">
+      <div className="mt-8">
         <h2 className="mb-4 text-2xl font-semibold text-gray-800">
           Semua Transaksi
         </h2>
 
         {history.length > 0 ? (
           <>
-            <div className="space-y-2">
+            <div className="space-y-4">
               {history.map((item, index) => (
                 <HistoryItem key={index} item={item} />
               ))}

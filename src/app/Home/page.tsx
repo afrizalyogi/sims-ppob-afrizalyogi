@@ -66,25 +66,13 @@ export default function Home() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-4 md:p-8">
+    <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
       <ProfileBalance
         userImage={userImage}
         userName={userName}
         balance={balance}
       />
-
-      <div className="mt-8">
-        <div className="flex justify-around gap-4">
-          {services.map((service) => (
-            <ServiceIcon
-              key={service.service_code}
-              service={service}
-              onClick={handleServiceClick}
-            />
-          ))}
-        </div>
-      </div>
-
+      <ServiceIcon services={services} onClick={handleServiceClick} />
       <PromoBanner banners={banners} />
     </div>
   );

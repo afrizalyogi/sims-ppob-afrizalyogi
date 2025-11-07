@@ -1,25 +1,31 @@
 import type { Service } from "../../features/transactionSlice";
 
 interface ServiceIconProps {
-  service: Service;
+  services: Service[];
   onClick: (service: Service) => void;
 }
 
-export default function ServiceIcon({ service, onClick }: ServiceIconProps) {
+export default function ServiceIcon({ services, onClick }: ServiceIconProps) {
   return (
-    <div
-      className="flex flex-col items-center p-2 gap-2 cursor-pointer hover:bg-gray-100 rounded-lg transition"
-      onClick={() => onClick(service)}
-      title={service.service_name}
-    >
-      <img
-        src={service.service_icon}
-        alt={service.service_name}
-        className="w-16 h-16 object-cover item-center transition transform hover:scale-105 "
-      />
-      <span className="text-xs text-center text-gray-600 leading-tight">
-        {service.service_name}
-      </span>
+    <div className="mt-8">
+      <div className="flex space-x-4 overflow-x-auto pb-4">
+        {services.map((service) => (
+          <div
+            className="flex cursor-pointer flex-col items-center gap-2 rounded-sm p-2 transition hover:bg-gray-100"
+            onClick={() => onClick(service)}
+            title={service.service_name}
+          >
+            <img
+              src={service.service_icon}
+              alt={service.service_name}
+              className="item-center h-16 w-16 transform object-cover transition hover:scale-105"
+            />
+            <span className="text-center text-xs leading-tight text-gray-600">
+              {service.service_name}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

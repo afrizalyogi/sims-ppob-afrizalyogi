@@ -27,30 +27,18 @@ export default function HistoryItem({ item }: HistoryItemProps) {
   });
 
   return (
-    <div className="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0">
-      {" "}
+    <div className="flex items-center justify-between rounded-sm border border-gray-200 p-6">
       <div className="min-w-0 flex-1">
-        {" "}
         <p className={`font-semibold ${amountColor}`}>
-          {amountSign} Rp{item.total_amount.toLocaleString("id-ID")}{" "}
-        </p>{" "}
+          {amountSign} Rp{item.total_amount.toLocaleString("id-ID")}
+        </p>
         <p className="mt-0.5 text-xs text-gray-500">
-          {dateDisplay} | {timeDisplay}{" "}
-        </p>{" "}
-      </div>{" "}
+          {dateDisplay} | {timeDisplay}
+        </p>
+      </div>
       <div className="text-right">
-        {" "}
-        <p className="text-sm font-medium text-gray-700">
-          {item.description}
-        </p>{" "}
-        <span
-          className={`mt-0.5 inline-block rounded-md px-2 py-0.5 text-xs ${
-            isTopUp ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-          }`}
-        >
-          {item.transaction_type}{" "}
-        </span>{" "}
-      </div>{" "}
+        <p className="text-sm font-medium text-gray-700">{item.description}</p>
+      </div>
     </div>
   );
 }

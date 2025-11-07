@@ -72,10 +72,7 @@ export default function TopUp() {
 
   const handleQuickNominal = (amount: number) => {
     formik.setFieldValue("nominal", amount);
-    formik.setFieldValue(
-      "nominalString",
-      amount.toLocaleString("id-ID").replace(/,/g, ""),
-    );
+    formik.setFieldValue("nominalString", amount);
     formik.setFieldTouched("nominal", true);
   };
 
@@ -104,55 +101,57 @@ export default function TopUp() {
         balance={balance}
       />
 
-      <div className="mt-8 rounded-lg bg-white p-6 shadow-md">
-        <h2 className="mb-6 text-2xl font-semibold text-gray-800">
-          Silahkan masukkan Nominal Top Up
-        </h2>
+      <div className="mt-8 w-full">
+        <p className="mt-4 text-lg">Silahkan masukan</p>
+        <p className="mt-2 text-3xl font-bold">Nominal Top Up</p>
 
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
-          <Input
-            id="nominalString"
-            name="nominalString"
-            type="text"
-            placeholder="masukkan nominal Top Up"
-            icon="Rp"
-            value={formik.values.nominalString}
-            onChange={handleNominalInput}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.nominal && formik.errors.nominal
-                ? formik.errors.nominal
-                : undefined
-            }
-            disabled={isLoading}
-          />
-
-          <div className="grid grid-cols-3 gap-4">
-            {quickNominals.map((amount) => (
-              <button
-                key={amount}
-                type="button"
-                className={`rounded-lg border py-2 text-sm font-medium transition ${
-                  formik.values.nominal === amount
-                    ? "border-red-500 bg-red-500 text-white"
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-red-50"
-                } `}
-                onClick={() => handleQuickNominal(amount)}
+        <form onSubmit={formik.handleSubmit} className="mt-8 w-full space-y-6">
+          <div className="flex w-full grid-cols-3 flex-col-reverse items-center gap-4 lg:grid">
+            <div className="col-span-2 flex w-full flex-col gap-4">
+              <Input
+                id="nominalString"
+                name="nominalString"
+                type="text"
+                placeholder="masukkan nominal Top Up"
+                icon="Rp"
+                value={formik.values.nominalString}
+                onChange={handleNominalInput}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.nominal && formik.errors.nominal
+                    ? formik.errors.nominal
+                    : undefined
+                }
                 disabled={isLoading}
-              >
-                Rp{amount.toLocaleString("id-ID")}
-              </button>
-            ))}
-          </div>
+              />
 
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            disabled={isButtonDisabled}
-            className={`mt-6 w-full ${isButtonDisabled ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"}`}
-          >
-            Top Up
-          </Button>
+              <Button
+                type="submit"
+                isLoading={isLoading}
+                disabled={isButtonDisabled}
+                className={`${isButtonDisabled ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"}`}
+              >
+                Top Up
+              </Button>
+            </div>
+            <div className="col-span-1 grid w-full grid-cols-3 gap-4">
+              {quickNominals.map((amount) => (
+                <button
+                  key={amount}
+                  type="button"
+                  className={`rounded-sm border py-3 text-sm font-medium transition ${
+                    formik.values.nominal === amount
+                      ? "border-red-500 bg-red-500 text-white"
+                      : "border-gray-300 bg-white text-gray-700 hover:bg-red-50"
+                  } `}
+                  onClick={() => handleQuickNominal(amount)}
+                  disabled={isLoading}
+                >
+                  Rp{amount.toLocaleString("id-ID")}
+                </button>
+              ))}
+            </div>
+          </div>
         </form>
       </div>
     </div>

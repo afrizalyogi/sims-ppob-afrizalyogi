@@ -22,7 +22,7 @@ export default function Input({
     : "border-gray-300 focus:ring-red-500";
 
   return (
-    <div className="w-full">
+    <div className="">
       <div className="relative">
         {icon && (
           <span className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-sm text-gray-300">

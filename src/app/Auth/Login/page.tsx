@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AlternateEmail, LockOutline } from "@mui/icons-material";
+import { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -14,6 +15,8 @@ import {
 
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import AuthImage from "../../../components/widgets/AuthImage";
+import NotificationBar from "../../../components/ui/NotificationBar";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,6 +32,10 @@ export default function Login() {
   const status = useAppSelector(selectAuthStatus);
   const error = useAppSelector(selectAuthError);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+
+  const [notificationMessage, setNotificationMessage] = useState<string | null>(
+    null,
+  );
 
   const isLoading = status === "loading";
 
@@ -49,10 +56,14 @@ export default function Login() {
     }
 
     if (status === "failed" && error) {
-      alert(`Login Gagal: ${error}`);
-      dispatch(clearAuthStatus());
+      setNotificationMessage(error);
     }
-  }, [isAuthenticated, status, error, navigate, dispatch]);
+  }, [isAuthenticated, status, error, navigate]);
+
+  const handleCloseNotification = () => {
+    setNotificationMessage(null);
+    dispatch(clearAuthStatus());
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -102,7 +113,7 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="text-center text-sm">
+          <div className="grow text-center">
             Belum punya akun?
             <Link
               to="/registration"
@@ -111,14 +122,17 @@ export default function Login() {
               Registrasi di sini
             </Link>
           </div>
+          {notificationMessage && (
+            <NotificationBar
+              message={notificationMessage}
+              onClose={handleCloseNotification}
+              type="error"
+            />
+          )}
         </div>
       </div>
 
-      <div className="relative hidden bg-gray-100 lg:block lg:w-1/2">
-        <div className="flex h-full items-center justify-center">
-          <img src="/Illustrasi Login.png" alt="Login" />
-        </div>
-      </div>
+      <AuthImage />
     </div>
   );
 }

@@ -17,6 +17,7 @@ import { logout } from "../../features/authSlice";
 
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import { AlternateEmail, Edit, Person } from "@mui/icons-material";
 
 const UpdateProfileSchema = Yup.object().shape({
   first_name: Yup.string().required("Nama depan wajib diisi."),
@@ -108,11 +109,15 @@ export default function Profile() {
           onChange={handleImageChange}
           className="hidden"
         />
-
         <div
-          className="relative h-32 w-32 cursor-pointer overflow-hidden rounded-full border-2 border-gray-200 shadow-md"
-          onClick={() => fileInputRef.current?.click()}
-          title="Klik untuk mengubah foto"
+          className={`${!isEditing || isUpdating ? "hidden" : ""} absolute z-10 mt-22 ml-24 flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-200 bg-white p-2 text-gray-600`}
+        >
+          <Edit width={2} height={2} />
+        </div>
+        <div
+          className={`${!isEditing || isUpdating ? "" : "cursor-pointer"} relative h-32 w-32 overflow-hidden rounded-full border-2 border-gray-200`}
+          onClick={() => isEditing && fileInputRef.current?.click()}
+          title={isEditing ? "Klik untuk mengubah foto" : ""}
         >
           <img
             src={
@@ -124,7 +129,9 @@ export default function Profile() {
             alt="Profile"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 flex items-center justify-center bg-black text-xl text-white opacity-0 transition duration-300 hover:opacity-20">
+          <div
+            className={`${!isEditing || isUpdating ? "hidden" : ""} absolute inset-0 flex items-center justify-center bg-black text-xl text-white opacity-0 transition duration-300 hover:opacity-20`}
+          >
             {isUpdating ? "..." : "Ganti"}
           </div>
         </div>
@@ -134,7 +141,7 @@ export default function Profile() {
 
       <form
         onSubmit={formik.handleSubmit}
-        className="mx-auto max-w-4xl space-y-4"
+        className="mx-auto max-w-4xl space-y-6"
       >
         <label htmlFor="email">Email</label>
         <Input
@@ -142,7 +149,7 @@ export default function Profile() {
           name="email"
           type="email"
           placeholder="Email"
-          icon="📧"
+          icon={<AlternateEmail />}
           value={user.email}
           disabled={true}
         />
@@ -152,7 +159,7 @@ export default function Profile() {
           id="first_name"
           type="text"
           placeholder="Nama Depan"
-          icon="👤"
+          icon={<Person />}
           disabled={!isEditing || isUpdating}
           {...formik.getFieldProps("first_name")}
           error={
@@ -165,7 +172,7 @@ export default function Profile() {
           id="last_name"
           type="text"
           placeholder="Nama Belakang"
-          icon="👤"
+          icon={<Person />}
           disabled={!isEditing || isUpdating}
           {...formik.getFieldProps("last_name")}
           error={formik.touched.last_name ? formik.errors.last_name : undefined}

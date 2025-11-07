@@ -14,6 +14,8 @@ import {
 
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import AuthImage from "../../../components/widgets/AuthImage";
+import NotificationBar from "../../../components/ui/NotificationBar";
 
 const allowedTlds = [
   "com",
@@ -63,6 +65,9 @@ export default function Register() {
   const status = useAppSelector(selectAuthStatus);
   const error = useAppSelector(selectAuthError);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState<string | null>(
+    null,
+  );
 
   const isLoading = status === "loading";
 
@@ -94,10 +99,15 @@ export default function Register() {
         window.location.href = "/login";
       }, 1000);
     } else if (status === "failed" && error) {
-      alert(`Registrasi Gagal: ${error}`);
+      setNotificationMessage(error);
       dispatch(clearAuthStatus());
     }
   }, [status, error, dispatch, registrationSuccess]);
+
+  const handleCloseNotification = () => {
+    setNotificationMessage(null);
+    dispatch(clearAuthStatus());
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -189,14 +199,17 @@ export default function Register() {
               Login di sini
             </Link>
           </div>
+          {notificationMessage && (
+            <NotificationBar
+              message={notificationMessage}
+              onClose={handleCloseNotification}
+              type="error"
+            />
+          )}
         </div>
       </div>
 
-      <div className="relative hidden bg-gray-100 lg:block lg:w-1/2">
-        <div className="flex h-full items-center justify-center">
-          <img src="/Illustrasi Login.png" alt="Registrasi" />
-        </div>
-      </div>
+      <AuthImage />
     </div>
   );
 }

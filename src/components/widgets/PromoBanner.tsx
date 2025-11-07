@@ -14,21 +14,21 @@ export default function PromoBanner({ banners }: PromoBannerProps) {
 
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">
+      <h2 className="mb-4 text-xl font-semibold text-gray-800">
         Temukan promo menarik
       </h2>
 
-      <div className="flex overflow-x-auto space-x-4 pb-4">
+      <div className="flex space-x-4 overflow-x-auto pb-4">
         {banners.map((banner, index) => (
           <div
             key={index}
-            className="flex shrink-0 w-80 h-32 rounded-lg shadow-md overflow-hidden cursor-pointer"
+            className="flex h-32 w-80 shrink-0 cursor-pointer overflow-hidden rounded-sm shadow-md"
             title={banner.banner_name}
           >
             <img
               src={banner.banner_image}
               alt={banner.banner_name}
-              className="w-full h-full object-cover transition transform hover:scale-105"
+              className="h-full w-full transform object-cover transition hover:scale-105"
             />
           </div>
         ))}
