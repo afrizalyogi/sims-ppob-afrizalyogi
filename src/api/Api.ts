@@ -27,8 +27,18 @@ Api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      console.error("Sesi berakhir (401). Mohon login ulang.");
+    if (error.response) {
+      const responseData = error.response.data;
+
+      if (
+        error.response.status === 401 ||
+        (responseData && responseData.status === 108)
+      ) {
+        console.error("Token tidak valid atau kadaluwarsa. Mohon login ulang.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("tokenExpiration");
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   },

@@ -4,7 +4,7 @@ import type { ApiError } from "../interfaces/ApiError";
 import { createAppSlice } from "../store/createAppSlice";
 import Api from "../api/Api";
 
-interface Service {
+export interface Service {
   service_code: string;
   service_name: string;
   service_icon: string;
@@ -16,18 +16,41 @@ interface Banner {
   banner_image: string;
 }
 
+interface TopUpPayload {
+  top_up_amount: number;
+}
+
+interface PaymentPayload {
+  service_code: string;
+  service_amount: number;
+}
+
+interface HistoryTransaction {
+  invoice_number: string;
+  transaction_type: "TOPUP" | "PAYMENT";
+  description: string;
+  total_amount: number;
+  created_on: string;
+}
+
 interface TransactionState {
   services: Service[];
   banners: Banner[];
+  history: HistoryTransaction[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  historyStatus: "idle" | "loading" | "succeeded" | "failed";
+  historyError: string | null;
 }
 
 const initialState: TransactionState = {
   services: [],
   banners: [],
+  history: [],
   status: "idle",
   error: null,
+  historyStatus: "idle",
+  historyError: null,
 };
 
 export const transactionSlice = createAppSlice({
@@ -38,6 +61,7 @@ export const transactionSlice = createAppSlice({
       state.status = "idle";
       state.error = null;
     }),
+
     getServices: create.asyncThunk<Service[], void, { rejectValue: string }>(
       async (_, { rejectWithValue }) => {
         try {
@@ -72,6 +96,7 @@ export const transactionSlice = createAppSlice({
         },
       },
     ),
+
     getBanners: create.asyncThunk<Banner[], void, { rejectValue: string }>(
       async (_, { rejectWithValue }) => {
         try {
@@ -106,15 +131,119 @@ export const transactionSlice = createAppSlice({
         },
       },
     ),
+
+    topUp: create.asyncThunk<string, TopUpPayload, { rejectValue: string }>(
+      async (data, { rejectWithValue }) => {
+        try {
+          const response = await Api.post("/topup", data);
+          return response.data.message as string;
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const message =
+            apiError.response?.data?.message ||
+            "Top Up Gagal. Saldo tidak bertambah.";
+          return rejectWithValue(message);
+        }
+      },
+      {
+        pending: (state) => {
+          state.status = "loading";
+          state.error = null;
+        },
+        fulfilled: (state) => {
+          state.status = "succeeded";
+        },
+        rejected: (state, action) => {
+          state.status = "failed";
+          state.error = action.payload as string;
+        },
+      },
+    ),
+
+    transaction: create.asyncThunk<
+      string,
+      PaymentPayload,
+      { rejectValue: string }
+    >(
+      async (data, { rejectWithValue }) => {
+        try {
+          const response = await Api.post("/transaction", data);
+          return response.data.message as string;
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const message =
+            apiError.response?.data?.message ||
+            "Transaksi Gagal. Saldo mungkin tidak mencukupi.";
+          return rejectWithValue(message);
+        }
+      },
+      {
+        pending: (state) => {
+          state.status = "loading";
+          state.error = null;
+        },
+        fulfilled: (state) => {
+          state.status = "succeeded";
+        },
+        rejected: (state, action) => {
+          state.status = "failed";
+          state.error = action.payload as string;
+        },
+      },
+    ),
+
+    getHistory: create.asyncThunk<
+      HistoryTransaction[],
+      { limit: number; offset: number },
+      { rejectValue: string }
+    >(
+      async ({ limit, offset }, { rejectWithValue }) => {
+        try {
+          const response = await Api.get(
+            `/transaction/history?limit=${limit}&offset=${offset}`,
+          );
+          return response.data.data.records as HistoryTransaction[];
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const message =
+            apiError.response?.data?.message ||
+            "Gagal mengambil riwayat transaksi.";
+          return rejectWithValue(message);
+        }
+      },
+      {
+        pending: (state, action) => {
+          state.historyStatus = "loading";
+          state.historyError = null;
+          if (action.meta.arg.offset === 0) {
+            state.history = [];
+          }
+        },
+        fulfilled: (state, action) => {
+          state.historyStatus = "succeeded";
+          state.history = state.history.concat(action.payload);
+        },
+        rejected: (state, action) => {
+          state.historyStatus = "failed";
+          state.historyError = action.payload || null;
+        },
+      },
+    ),
   }),
 });
 
-export const { clearTransactionStatus, getServices, getBanners } =
+export const { clearTransactionStatus } = transactionSlice.actions;
+
+export const { getServices, getBanners, topUp, transaction, getHistory } =
   transactionSlice.actions;
 
 export const selectServices = (state: RootState) => state.transaction.services;
 export const selectBanners = (state: RootState) => state.transaction.banners;
 export const selectTransactionStatus = (state: RootState) =>
   state.transaction.status;
+export const selectTransactionHistory = (state: RootState) =>
+  state.transaction.history;
+export const selectHistoryStatus = (state: RootState) =>
+  state.transaction.historyStatus;
 
 export default transactionSlice.reducer;

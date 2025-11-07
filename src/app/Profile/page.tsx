@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router";
-import MainLayout from "../../components/Layout/MainLayout";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -16,8 +15,8 @@ import {
 } from "../../features/profileSlice";
 import { logout } from "../../features/authSlice";
 
-import Input from "../../components/UI/Input";
-import Button from "../../components/UI/Button";
+import Input from "../../components/ui/Input";
+import Button from "../../components/ui/Button";
 
 const UpdateProfileSchema = Yup.object().shape({
   first_name: Yup.string().required("Nama depan wajib diisi."),
@@ -88,11 +87,7 @@ export default function Profile() {
   };
 
   if (profileStatus === "loading" && !user) {
-    return (
-      <MainLayout>
-        <div className="p-8 text-center mx-auto">Memuat Profile...</div>
-      </MainLayout>
-    );
+    return <div className="mx-auto p-8 text-center">Memuat Profile...</div>;
   }
 
   if (!user) {
@@ -104,122 +99,123 @@ export default function Profile() {
   }
 
   return (
-    <MainLayout>
-      <div className="p-4 md:p-8 max-w-7xl w-full mx-auto">
-        <div className="flex flex-col items-center mb-6  mx-auto">
-          <input
-            type="file"
-            accept="image/png, image/jpeg, image/jpg"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            className="hidden"
+    <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
+      <div className="mx-auto mb-6 flex flex-col items-center">
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+          className="hidden"
+        />
+
+        <div
+          className="relative h-32 w-32 cursor-pointer overflow-hidden rounded-full border-2 border-gray-200 shadow-md"
+          onClick={() => fileInputRef.current?.click()}
+          title="Klik untuk mengubah foto"
+        >
+          <img
+            src={
+              user?.profile_image ===
+              "https://minio.nutech-integrasi.com/take-home-test/null"
+                ? "/Profile Photo.png"
+                : user?.profile_image || "/Profile Photo.png"
+            }
+            alt="Profile"
+            className="h-full w-full object-cover"
           />
-
-          <div
-            className="relative w-32 h-32 rounded-full overflow-hidden cursor-pointer shadow-md border-2 border-gray-200"
-            onClick={() => fileInputRef.current?.click()}
-            title="Klik untuk mengubah foto"
-          >
-            <img
-              src={user.profile_image || "/src/assets/default-profile.png"}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black opacity-0 hover:opacity-20 transition duration-300 flex items-center justify-center text-white text-xl">
-              {isUpdating ? "..." : "Ganti"}
-            </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-black text-xl text-white opacity-0 transition duration-300 hover:opacity-20">
+            {isUpdating ? "..." : "Ganti"}
           </div>
-
-          <h2 className="mt-4 text-xl font-semibold">{`${user.first_name} ${user.last_name}`}</h2>
         </div>
 
-        <form
-          onSubmit={formik.handleSubmit}
-          className="space-y-4 max-w-4xl mx-auto"
-        >
-          <label htmlFor="email">Email</label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            icon="📧"
-            value={user.email}
-            disabled={true}
-          />
-
-          <label htmlFor="first_name">Nama Depan</label>
-          <Input
-            id="first_name"
-            type="text"
-            placeholder="Nama Depan"
-            icon="👤"
-            disabled={!isEditing || isUpdating}
-            {...formik.getFieldProps("first_name")}
-            error={
-              formik.touched.first_name ? formik.errors.first_name : undefined
-            }
-          />
-
-          <label htmlFor="last_name">Nama Belakang</label>
-          <Input
-            id="last_name"
-            type="text"
-            placeholder="Nama Belakang"
-            icon="👤"
-            disabled={!isEditing || isUpdating}
-            {...formik.getFieldProps("last_name")}
-            error={
-              formik.touched.last_name ? formik.errors.last_name : undefined
-            }
-          />
-
-          <div className="pt-4 space-y-3">
-            {isEditing ? (
-              <>
-                <Button
-                  type="submit"
-                  isLoading={isUpdating}
-                  disabled={!formik.isValid || isUpdating}
-                >
-                  Simpan
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setIsEditing(false);
-                    formik.resetForm();
-                  }}
-                  disabled={isUpdating}
-                  variant="outline"
-                >
-                  Batalkan
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsEditing(true);
-                  }}
-                  variant="outline"
-                >
-                  Edit Profile
-                </Button>
-                <Button
-                  type="button"
-                  onClick={handleLogout}
-                  disabled={isUpdating}
-                >
-                  Logout
-                </Button>
-              </>
-            )}
-          </div>
-        </form>
+        <h2 className="mt-4 text-xl font-semibold">{`${user.first_name} ${user.last_name}`}</h2>
       </div>
-    </MainLayout>
+
+      <form
+        onSubmit={formik.handleSubmit}
+        className="mx-auto max-w-4xl space-y-4"
+      >
+        <label htmlFor="email">Email</label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Email"
+          icon="📧"
+          value={user.email}
+          disabled={true}
+        />
+
+        <label htmlFor="first_name">Nama Depan</label>
+        <Input
+          id="first_name"
+          type="text"
+          placeholder="Nama Depan"
+          icon="👤"
+          disabled={!isEditing || isUpdating}
+          {...formik.getFieldProps("first_name")}
+          error={
+            formik.touched.first_name ? formik.errors.first_name : undefined
+          }
+        />
+
+        <label htmlFor="last_name">Nama Belakang</label>
+        <Input
+          id="last_name"
+          type="text"
+          placeholder="Nama Belakang"
+          icon="👤"
+          disabled={!isEditing || isUpdating}
+          {...formik.getFieldProps("last_name")}
+          error={formik.touched.last_name ? formik.errors.last_name : undefined}
+        />
+
+        <div className="space-y-3 pt-4">
+          {isEditing ? (
+            <>
+              <Button
+                type="submit"
+                isLoading={isUpdating}
+                disabled={!formik.isValid || isUpdating}
+              >
+                Simpan
+              </Button>
+              <Button
+                type="button"
+                onClick={() => {
+                  setIsEditing(false);
+                  formik.resetForm();
+                }}
+                disabled={isUpdating}
+                variant="outline"
+              >
+                Batalkan
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsEditing(true);
+                }}
+                variant="outline"
+              >
+                Edit Profile
+              </Button>
+              <Button
+                type="button"
+                onClick={handleLogout}
+                disabled={isUpdating}
+              >
+                Logout
+              </Button>
+            </>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }

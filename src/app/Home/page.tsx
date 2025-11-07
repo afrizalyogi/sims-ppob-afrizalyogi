@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-// import { useNavigate } from "react-router";
-import MainLayout from "../../components/Layout/MainLayout";
+import { useNavigate } from "react-router";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -15,14 +14,15 @@ import {
   selectServices,
   selectBanners,
 } from "../../features/transactionSlice";
+import type { Service } from "../../features/transactionSlice";
 
-import BalanceCard from "../../components/Widget/BalanceCard";
-import ServiceIcon from "../../components/Widget/ServiceIcon";
-import PromoBanner from "../../components/Widget/PromoBanner";
+import ProfileBalance from "../../components/widgets/ProfileBalance";
+import ServiceIcon from "../../components/widgets/ServiceIcon";
+import PromoBanner from "../../components/widgets/PromoBanner";
 
 export default function Home() {
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const user = useAppSelector(selectUserProfile);
   const balance = useAppSelector(selectUserBalance);
@@ -30,7 +30,11 @@ export default function Home() {
   const banners = useAppSelector(selectBanners);
 
   const userName = `${user?.first_name || ""} ${user?.last_name || "Pengguna"}`;
-  const userImage = user?.profile_image || "/Profile Photo.png";
+  const userImage =
+    user?.profile_image ===
+    "https://minio.nutech-integrasi.com/take-home-test/null"
+      ? "/Profile Photo.png"
+      : user?.profile_image || "/Profile Photo.png";
 
   useEffect(() => {
     if (!user) {
@@ -53,61 +57,35 @@ export default function Home() {
     }
   }, [dispatch, banners.length]);
 
-  const handleServiceClick = (service) => {
-    alert(
-      `Anda mengklik layanan: ${service.service_name}. Lanjutkan ke Pembayaran.`,
-    );
+  const handleServiceClick = (service: Service) => {
+    navigate(`/transaction/payment/${service.service_code}`);
   };
 
   if (!user) {
-    return (
-      <MainLayout>
-        <div className="p-8 text-center mx-auto">Loading...</div>
-      </MainLayout>
-    );
+    return <div className="mx-auto p-8 text-center">Loading...</div>;
   }
 
   return (
-    <MainLayout>
-      <div className="p-4 md:p-8 max-w-7xl mx-auto">
-        <div className="flex gap-8 mb-8 justify-between">
-          <div className="lg:col-span-1 flex flex-col items-center lg:items-start">
-            <img
-              src={userImage}
-              alt="Profile"
-              className="w-20 h-20  mb-4 rounded-full object-cover shadow-md border-2 border-gray-200"
+    <div className="mx-auto max-w-7xl p-4 md:p-8">
+      <ProfileBalance
+        userImage={userImage}
+        userName={userName}
+        balance={balance}
+      />
+
+      <div className="mt-8">
+        <div className="flex justify-around gap-4">
+          {services.map((service) => (
+            <ServiceIcon
+              key={service.service_code}
+              service={service}
+              onClick={handleServiceClick}
             />
-            <h1 className="text-xl font-medium text-gray-800 text-center lg:text-left">
-              Selamat datang,
-            </h1>
-            <h2 className="text-2xl font-bold text-gray-900 text-center lg:text-left">
-              {userName}
-            </h2>
-          </div>
-
-          <div className="w-[650px]">
-            <BalanceCard
-              balance={balance}
-              userName={userName}
-              showFullName={false}
-            />
-          </div>
+          ))}
         </div>
-
-        <div className="mt-8">
-          <div className="flex gap-4 justify-around">
-            {services.map((service) => (
-              <ServiceIcon
-                key={service.service_code}
-                service={service}
-                onClick={handleServiceClick}
-              />
-            ))}
-          </div>
-        </div>
-
-        <PromoBanner banners={banners} />
       </div>
-    </MainLayout>
+
+      <PromoBanner banners={banners} />
+    </div>
   );
 }

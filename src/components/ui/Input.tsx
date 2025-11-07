@@ -1,13 +1,8 @@
-interface InputProps {
-  id?: string;
-  name?: string;
-  type?: "text" | "password" | "email" | "number" | "hidden" | undefined;
-  value?: string | number | readonly string[];
-  placeholder?: string;
+import React from "react";
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
   error?: string | null | undefined;
-  disabled?: boolean;
-  className?: string;
 }
 
 export default function Input({
@@ -30,7 +25,7 @@ export default function Input({
     <div className="w-full">
       <div className="relative">
         {icon && (
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg">
+          <span className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-sm text-gray-300">
             {icon}
           </span>
         )}
@@ -42,15 +37,7 @@ export default function Input({
           value={value}
           placeholder={placeholder}
           disabled={disabled}
-          className={`
-            block w-full px-3 py-3 border rounded-sm
-            placeholder-gray-500 text-gray-900
-            focus:outline-none focus:ring-2 focus:border-transparent
-            ${borderStyle}
-            ${icon ? "pl-10" : "pl-3"}
-            ${disabled ? "bg-gray-50 cursor-not-allowed" : "bg-white"}
-            ${className}
-          `}
+          className={`block w-full rounded-sm border p-3 text-sm text-gray-900 placeholder-gray-300 focus:border-transparent focus:ring-2 focus:outline-none ${borderStyle} ${icon ? "pl-12" : "pl-3"} ${disabled ? "cursor-not-allowed bg-gray-50" : "bg-white"} ${className} `}
           {...rest}
         />
       </div>

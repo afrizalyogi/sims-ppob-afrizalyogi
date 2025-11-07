@@ -8,24 +8,23 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+    <header className="sticky top-0 z-30 bg-white shadow-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex">
-          <NavLink to="/" className="font-bold flex items-center">
+          <NavLink to="/" className="flex items-center font-bold">
             <span className="mr-2 text-2xl">
               <img src="/Logo.png" alt="SIMS PPOB" className="w-8" />
             </span>{" "}
             SIMS PPOB
           </NavLink>
         </div>
-        <nav className="flex space-x-6">
+        <nav className="flex space-x-4 lg:space-x-10">
           {navItems.map((item) => (
             <NavLink
               key={item.name}
               to={item.path}
               className={({ isActive }) =>
-                `text-gray-600 hover:text-red-500 font-medium transition duration-150
-                 ${isActive ? "text-red-600" : ""}`
+                `font-medium text-gray-600 transition duration-150 hover:text-red-500 ${isActive ? "text-red-600" : ""}`
               }
             >
               {item.name}

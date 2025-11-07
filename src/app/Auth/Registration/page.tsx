@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { AlternateEmail, Person, LockOutline } from "@mui/icons-material";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
@@ -11,8 +12,8 @@ import {
   clearAuthStatus,
 } from "../../../features/authSlice";
 
-import Input from "../../../components/UI/Input";
-import Button from "../../../components/UI/Button";
+import Input from "../../../components/ui/Input";
+import Button from "../../../components/ui/Button";
 
 const allowedTlds = [
   "com",
@@ -100,11 +101,14 @@ export default function Register() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
         <div className="w-full max-w-md space-y-8">
-          <div className="text-center">
-            <h2 className="text-xl font-bold text-red-500">SIMS PPOB</h2>
-            <h1 className="mt-4 text-3xl font-extrabold text-gray-900">
+          <div className="flex flex-col items-center gap-10 text-center">
+            <div className="mx-auto flex gap-2">
+              <img src="/Logo.png" alt="Logo" className="h-8 w-8" />
+              <h2 className="text-xl font-bold">SIMS PPOB</h2>
+            </div>
+            <h1 className="mb-4 text-3xl font-extrabold text-gray-900">
               Lengkapi data untuk membuat akun
             </h1>
           </div>
@@ -114,7 +118,7 @@ export default function Register() {
               id="email"
               type="email"
               placeholder="Masukkan email anda"
-              icon="📧"
+              icon={<AlternateEmail />}
               {...formik.getFieldProps("email")}
               error={formik.touched.email ? formik.errors.email : undefined}
               disabled={isLoading}
@@ -123,7 +127,7 @@ export default function Register() {
               id="first_name"
               type="text"
               placeholder="Nama depan"
-              icon="👤"
+              icon={<Person />}
               {...formik.getFieldProps("first_name")}
               error={
                 formik.touched.first_name ? formik.errors.first_name : undefined
@@ -134,7 +138,7 @@ export default function Register() {
               id="last_name"
               type="text"
               placeholder="Nama belakang"
-              icon="👤"
+              icon={<Person />}
               {...formik.getFieldProps("last_name")}
               error={
                 formik.touched.last_name ? formik.errors.last_name : undefined
@@ -145,7 +149,7 @@ export default function Register() {
               id="password"
               type="password"
               placeholder="Buat password"
-              icon="🔒"
+              icon={<LockOutline />}
               {...formik.getFieldProps("password")}
               error={
                 formik.touched.password ? formik.errors.password : undefined
@@ -156,7 +160,7 @@ export default function Register() {
               id="confirm_password"
               type="password"
               placeholder="Konfirmasi password"
-              icon="🔒"
+              icon={<LockOutline />}
               {...formik.getFieldProps("confirm_password")}
               error={
                 formik.touched.confirm_password
@@ -170,7 +174,7 @@ export default function Register() {
               type="submit"
               isLoading={isLoading}
               disabled={isLoading || !formik.isValid}
-              className="w-full bg-red-500 hover:bg-red-600 mt-6"
+              className="mt-6 w-full bg-red-500 hover:bg-red-600"
             >
               Registrasi
             </Button>
@@ -180,7 +184,7 @@ export default function Register() {
             Sudah punya akun?
             <Link
               to="/login"
-              className="font-medium text-red-600 hover:text-red-500 ml-1"
+              className="ml-1 font-medium text-red-600 hover:text-red-500"
             >
               Login di sini
             </Link>
@@ -188,8 +192,10 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="hidden lg:block lg:w-1/2 bg-gray-100 relative">
-        <div className="flex items-center justify-center h-full"></div>
+      <div className="relative hidden bg-gray-100 lg:block lg:w-1/2">
+        <div className="flex h-full items-center justify-center">
+          <img src="/Illustrasi Login.png" alt="Registrasi" />
+        </div>
       </div>
     </div>
   );

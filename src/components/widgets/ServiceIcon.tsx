@@ -1,8 +1,4 @@
-interface Service {
-  service_code: string;
-  service_name: string;
-  service_icon: string;
-}
+import type { Service } from "../../features/transactionSlice";
 
 interface ServiceIconProps {
   service: Service;

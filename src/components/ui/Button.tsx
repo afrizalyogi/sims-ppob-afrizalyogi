@@ -1,12 +1,7 @@
 import React from "react";
 
-interface ButtonProps {
-  type?: "submit" | "reset" | "button" | undefined;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
-  className?: string;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
-  children?: React.ReactNode;
   variant?: "primary" | "outline";
 }
 
@@ -44,11 +39,7 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`
-        ${baseStyles}
-        ${variantStyles[variant]}
-        ${className}
-      `}
+      className={`cursor-pointer ${baseStyles} ${variantStyles[variant]} ${className} `}
       {...rest}
     >
       {children}

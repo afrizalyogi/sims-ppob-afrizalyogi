@@ -14,6 +14,7 @@ interface UserProfile {
 interface ProfileState {
   user: UserProfile | null;
   balance: number | null;
+  isBalanceVisible: boolean;
   status: "idle" | "loading" | "succeeded" | "failed";
   updateStatus: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -32,6 +33,7 @@ interface UpdateImageResponse {
 const initialState: ProfileState = {
   user: null,
   balance: null,
+  isBalanceVisible: false,
   status: "idle",
   updateStatus: "idle",
   error: null,
@@ -45,6 +47,12 @@ export const profileSlice = createAppSlice({
       state.updateStatus = "idle";
       state.error = null;
     }),
+
+    setIsBalanceVisibility: create.reducer(
+      (state: ProfileState, action: PayloadAction<boolean>) => {
+        state.isBalanceVisible = action.payload;
+      },
+    ),
 
     getProfile: create.asyncThunk<UserProfile, void, { rejectValue: string }>(
       async (_, { rejectWithValue }) => {
@@ -199,6 +207,7 @@ export const profileSlice = createAppSlice({
 
 export const {
   clearUpdateStatus,
+  setIsBalanceVisibility,
   getProfile,
   getBalance,
   updateProfileData,
@@ -207,6 +216,8 @@ export const {
 
 export const selectUserProfile = (state: RootState) => state.profile.user;
 export const selectUserBalance = (state: RootState) => state.profile.balance;
+export const selectIsBalanceVisible = (state: RootState) =>
+  state.profile.isBalanceVisible;
 export const selectProfileStatus = (state: RootState) => state.profile.status;
 export const selectUpdateStatus = (state: RootState) =>
   state.profile.updateStatus;
