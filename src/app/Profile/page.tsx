@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router";
+import MainLayout from "../../components/Layout/MainLayout";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -87,7 +88,11 @@ export default function Profile() {
   };
 
   if (profileStatus === "loading" && !user) {
-    return <div className="p-8 text-center">Memuat Profile...</div>;
+    return (
+      <MainLayout>
+        <div className="p-8 text-center mx-auto">Memuat Profile...</div>
+      </MainLayout>
+    );
   }
 
   if (!user) {
@@ -99,112 +104,122 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-lg mx-auto">
-      <div className="flex flex-col items-center mb-6">
-        <input
-          type="file"
-          accept="image/png, image/jpeg, image/jpg"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-          className="hidden"
-        />
-
-        <div
-          className="relative w-32 h-32 rounded-full overflow-hidden cursor-pointer shadow-md border-2 border-gray-200"
-          onClick={() => fileInputRef.current?.click()}
-          title="Klik untuk mengubah foto"
-        >
-          <img
-            src={user.profile_image || "/src/assets/default-profile.png"}
-            alt="Profile"
-            className="w-full h-full object-cover"
+    <MainLayout>
+      <div className="p-4 md:p-8 max-w-7xl w-full mx-auto">
+        <div className="flex flex-col items-center mb-6  mx-auto">
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/jpg"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+            className="hidden"
           />
-          <div className="absolute inset-0 bg-black opacity-0 hover:opacity-20 transition duration-300 flex items-center justify-center text-white text-xl">
-            {isUpdating ? "..." : "Ganti"}
+
+          <div
+            className="relative w-32 h-32 rounded-full overflow-hidden cursor-pointer shadow-md border-2 border-gray-200"
+            onClick={() => fileInputRef.current?.click()}
+            title="Klik untuk mengubah foto"
+          >
+            <img
+              src={user.profile_image || "/src/assets/default-profile.png"}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black opacity-0 hover:opacity-20 transition duration-300 flex items-center justify-center text-white text-xl">
+              {isUpdating ? "..." : "Ganti"}
+            </div>
           </div>
+
+          <h2 className="mt-4 text-xl font-semibold">{`${user.first_name} ${user.last_name}`}</h2>
         </div>
 
-        <h2 className="mt-4 text-xl font-semibold">{`${user.first_name} ${user.last_name}`}</h2>
+        <form
+          onSubmit={formik.handleSubmit}
+          className="space-y-4 max-w-4xl mx-auto"
+        >
+          <label htmlFor="email">Email</label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            icon="📧"
+            value={user.email}
+            disabled={true}
+          />
+
+          <label htmlFor="first_name">Nama Depan</label>
+          <Input
+            id="first_name"
+            type="text"
+            placeholder="Nama Depan"
+            icon="👤"
+            disabled={!isEditing || isUpdating}
+            {...formik.getFieldProps("first_name")}
+            error={
+              formik.touched.first_name ? formik.errors.first_name : undefined
+            }
+          />
+
+          <label htmlFor="last_name">Nama Belakang</label>
+          <Input
+            id="last_name"
+            type="text"
+            placeholder="Nama Belakang"
+            icon="👤"
+            disabled={!isEditing || isUpdating}
+            {...formik.getFieldProps("last_name")}
+            error={
+              formik.touched.last_name ? formik.errors.last_name : undefined
+            }
+          />
+
+          <div className="pt-4 space-y-3">
+            {isEditing ? (
+              <>
+                <Button
+                  type="submit"
+                  isLoading={isUpdating}
+                  disabled={!formik.isValid || isUpdating}
+                >
+                  Simpan
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(false);
+                    formik.resetForm();
+                  }}
+                  disabled={isUpdating}
+                  variant="outline"
+                >
+                  Batalkan
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsEditing(true);
+                  }}
+                  variant="outline"
+                >
+                  Edit Profile
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={isUpdating}
+                >
+                  Logout
+                </Button>
+              </>
+            )}
+          </div>
+        </form>
       </div>
-
-      <form onSubmit={formik.handleSubmit} className="space-y-4">
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Email"
-          icon="📧"
-          value={user.email}
-          disabled={true}
-        />
-
-        <Input
-          id="first_name"
-          type="text"
-          placeholder="Nama Depan"
-          icon="👤"
-          disabled={!isEditing || isUpdating}
-          {...formik.getFieldProps("first_name")}
-          error={
-            formik.touched.first_name ? formik.errors.first_name : undefined
-          }
-        />
-
-        <Input
-          id="last_name"
-          type="text"
-          placeholder="Nama Belakang"
-          icon="👤"
-          disabled={!isEditing || isUpdating}
-          {...formik.getFieldProps("last_name")}
-          error={formik.touched.last_name ? formik.errors.last_name : undefined}
-        />
-
-        <div className="pt-4 space-y-3">
-          {isEditing ? (
-            <>
-              <Button
-                type="submit"
-                isLoading={isUpdating}
-                disabled={!formik.isValid || isUpdating}
-              >
-                Simpan
-              </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  setIsEditing(false);
-                  formik.resetForm();
-                }}
-                disabled={isUpdating}
-                variant="outline"
-              >
-                Batalkan
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsEditing(true);
-                }}
-              >
-                Edit Profile
-              </Button>
-              <Button
-                type="button"
-                onClick={handleLogout}
-                disabled={isUpdating}
-                variant="outline"
-              >
-                Logout
-              </Button>
-            </>
-          )}
-        </div>
-      </form>
-    </div>
+    </MainLayout>
   );
 }

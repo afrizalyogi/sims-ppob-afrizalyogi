@@ -14,9 +14,9 @@ const router = createBrowserRouter([
   { path: "/registration", element: <Registration /> },
   { path: "/login", element: <Login /> },
   { path: "/profile", element: <Profile /> },
-  { path: "/topup", element: <TransactionTopup /> },
-  { path: "/payment", element: <TransactionPayment /> },
-  { path: "/history", element: <TransactionHistory /> },
+  { path: "/transaction/topup", element: <TransactionTopup /> },
+  { path: "/transaction/payment", element: <TransactionPayment /> },
+  { path: "/transaction/history", element: <TransactionHistory /> },
   { path: "*", element: <NotFound /> },
 ]);
 
