@@ -74,8 +74,8 @@ export default function Login() {
               <img src="/Logo.png" alt="Logo" className="h-8 w-8" />
               <h2 className="text-xl font-bold">SIMS PPOB</h2>
             </div>
-            <h1 className="mb-4 text-3xl font-extrabold text-gray-900">
-              Masuk atau buat akun <br /> untuk memulai
+            <h1 className="mb-4 max-w-sm text-3xl font-extrabold text-gray-900">
+              Masuk atau buat akun untuk memulai
             </h1>
           </div>
 
