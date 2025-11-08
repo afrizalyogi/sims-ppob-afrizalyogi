@@ -7,7 +7,6 @@ import {
   selectServices,
   transaction,
   selectTransactionStatus,
-  clearTransactionStatus,
   getServices,
 } from "../../../features/transactionSlice";
 import type { Service } from "../../../features/transactionSlice";
@@ -37,10 +36,6 @@ export default function Payment() {
   const isLoading = transactionStatus === "loading";
 
   const selectedService = services.find((s) => s.service_code === serviceCode);
-
-  useEffect(() => {
-    dispatch(clearTransactionStatus());
-  }, [dispatch]);
 
   useEffect(() => {
     if (services.length === 0) {
@@ -92,14 +87,12 @@ export default function Payment() {
 
     if (transaction.fulfilled.match(resultAction)) {
       setModalStatus("success");
-      dispatch(clearTransactionStatus());
       dispatch(getBalance());
     } else if (transaction.rejected.match(resultAction)) {
       setModalErrorMessage(
         (resultAction.payload as string) || "Terjadi kesalahan.",
       );
       setModalStatus("failed");
-      dispatch(clearTransactionStatus());
     }
   };
 
@@ -109,7 +102,6 @@ export default function Payment() {
     if (modalStatus === "success" || modalStatus === "failed") {
       navigate("/");
     }
-    dispatch(clearTransactionStatus());
   };
 
   if (!selectedService) {

@@ -23,7 +23,7 @@ export default function ProfileBalance() {
           <img
             src={userImage}
             alt="Profile"
-            className="mb-4 h-20 w-20 rounded-full object-cover shadow-sm"
+            className="mb-4 h-20 w-20 rounded-full object-cover shadow-sm sm:h-32 sm:w-32"
           />
         </div>
         <h1 className="text-center text-lg font-medium text-gray-800 sm:text-xl lg:text-left">

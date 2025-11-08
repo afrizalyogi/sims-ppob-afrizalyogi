@@ -6,6 +6,7 @@ import {
   selectTransactionHistory,
   selectHistoryStatus,
   selectTransactionStatus,
+  clearTransactionStatus,
 } from "../../../features/transactionSlice";
 import { selectUserBalance, getBalance } from "../../../features/profileSlice";
 
@@ -36,10 +37,12 @@ export default function History() {
   useEffect(() => {
     if (isFirstLoad) {
       loadHistory(0);
+      dispatch(clearTransactionStatus());
     }
     if (balance === null) {
       dispatch(getBalance());
     }
+    dispatch(clearTransactionStatus());
   }, [isFirstLoad, dispatch, balance, loadHistory]);
 
   useEffect(() => {

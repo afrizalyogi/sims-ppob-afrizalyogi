@@ -221,7 +221,16 @@ export const transactionSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.historyStatus = "succeeded";
-          state.history = state.history.concat(action.payload);
+          if (action.payload && action.payload.length > 0) {
+            const newItems = action.payload.filter(
+              (newItem) =>
+                !state.history.some(
+                  (existingItem) =>
+                    existingItem.invoice_number === newItem.invoice_number,
+                ),
+            );
+            state.history = state.history.concat(newItems);
+          }
         },
         rejected: (state, action) => {
           state.historyStatus = "failed";

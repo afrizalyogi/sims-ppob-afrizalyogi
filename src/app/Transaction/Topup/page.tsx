@@ -8,7 +8,6 @@ import { selectUserBalance, getBalance } from "../../../features/profileSlice";
 import {
   topUp,
   selectTransactionStatus,
-  clearTransactionStatus,
 } from "../../../features/transactionSlice";
 import type { Service } from "../../../features/transactionSlice";
 
@@ -79,7 +78,6 @@ export default function TopUp() {
       );
       setModalStatus("failed");
     }
-    dispatch(clearTransactionStatus());
   };
 
   const handleModalClose = () => {
@@ -88,7 +86,6 @@ export default function TopUp() {
     if (modalStatus === "success") {
       navigate("/");
     }
-    dispatch(clearTransactionStatus());
   };
 
   const handleNominalInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +93,6 @@ export default function TopUp() {
   };
 
   useEffect(() => {
-    dispatch(clearTransactionStatus());
     if (balance === null) {
       dispatch(getBalance());
     }

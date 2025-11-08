@@ -9,8 +9,9 @@ export default function ServiceIcon({ services, onClick }: ServiceIconProps) {
   return (
     <div className="mt-8">
       <div className="flex space-x-4 overflow-x-auto pb-4">
-        {services.map((service) => (
+        {services.map((service, index) => (
           <div
+            key={index}
             className="flex cursor-pointer flex-col items-center gap-2 rounded-sm p-2 transition hover:bg-gray-100"
             onClick={() => onClick(service)}
             title={service.service_name}

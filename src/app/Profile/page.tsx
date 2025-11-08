@@ -110,9 +110,13 @@ export default function Profile() {
           className="hidden"
         />
         <div
-          className={`${!isEditing || isUpdating ? "hidden" : ""} absolute z-10 mt-22 ml-24 flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-200 bg-white p-2 text-gray-600`}
+          className={`${!isEditing || isUpdating ? "hidden" : ""} absolute z-10 mt-12 ml-18 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-200 bg-white p-2 text-gray-600 sm:mt-22 sm:ml-24 sm:h-10 sm:w-10`}
         >
-          <Edit width={2} height={2} />
+          <Edit
+            width={2}
+            height={2}
+            onClick={() => isEditing && fileInputRef.current?.click()}
+          />
         </div>
         <div
           className={`${!isEditing || isUpdating ? "" : "cursor-pointer"} relative mb-4 h-20 w-20 overflow-hidden rounded-full border-2 border-gray-200 sm:h-32 sm:w-32`}
@@ -127,7 +131,7 @@ export default function Profile() {
                 : user?.profile_image || "/Profile Photo.png"
             }
             alt="Profile"
-            className="mb-4 h-20 w-20 rounded-full object-cover shadow-sm"
+            className="mb-4 h-20 w-20 rounded-full object-cover shadow-sm sm:h-32 sm:w-32"
           />
           <div
             className={`${!isEditing || isUpdating ? "hidden" : ""} absolute inset-0 flex items-center justify-center bg-black text-xl text-white opacity-0 transition duration-300 hover:opacity-20`}
