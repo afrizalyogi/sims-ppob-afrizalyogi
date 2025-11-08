@@ -3,11 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  selectUserProfile,
-  selectUserBalance,
-  getBalance,
-} from "../../../features/profileSlice";
+import { selectUserBalance, getBalance } from "../../../features/profileSlice";
 import {
   topUp,
   selectTransactionStatus,
@@ -34,23 +30,14 @@ const quickNominals = [10000, 20000, 50000, 100000, 250000, 500000];
 export default function TopUp() {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectUserProfile);
   const balance = useAppSelector(selectUserBalance);
   const topUpStatus = useAppSelector(selectTransactionStatus);
-
-  const userName = `${user?.first_name || "Pengguna"} ${user?.last_name || ""}`;
-  const userImage =
-    user?.profile_image ===
-    "https://minio.nutech-integrasi.com/take-home-test/null"
-      ? "/Profile Photo.png"
-      : user?.profile_image || "/Profile Photo.png";
 
   const isLoading = topUpStatus === "loading";
 
   const formik = useFormik({
     initialValues: {
-      nominal: 0,
-      nominalString: "",
+      nominal: 10000,
     },
     validationSchema: TopUpSchema,
     onSubmit: async (values) => {
@@ -72,16 +59,10 @@ export default function TopUp() {
 
   const handleQuickNominal = (amount: number) => {
     formik.setFieldValue("nominal", amount);
-    formik.setFieldValue("nominalString", amount);
-    formik.setFieldTouched("nominal", true);
   };
 
   const handleNominalInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/[^0-9]/g, "");
-    const numericValue = parseInt(rawValue) || 0;
-
-    formik.setFieldValue("nominal", numericValue);
-    formik.setFieldValue("nominalString", rawValue);
+    formik.setFieldValue("nominal", e.target.value);
   };
 
   useEffect(() => {
@@ -95,11 +76,7 @@ export default function TopUp() {
 
   return (
     <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
-      <ProfileBalance
-        userImage={userImage}
-        userName={userName}
-        balance={balance}
-      />
+      <ProfileBalance />
 
       <div className="mt-8 w-full">
         <p className="mt-4 text-lg">Silahkan masukan</p>
@@ -109,18 +86,18 @@ export default function TopUp() {
           <div className="flex w-full grid-cols-3 flex-col-reverse items-center gap-4 lg:grid">
             <div className="col-span-2 flex w-full flex-col gap-4">
               <Input
-                id="nominalString"
-                name="nominalString"
+                id="nominal"
+                name="nominal"
                 type="text"
                 placeholder="masukkan nominal Top Up"
                 icon="Rp"
-                value={formik.values.nominalString}
+                value={formik.values.nominal}
                 onChange={handleNominalInput}
                 onBlur={formik.handleBlur}
                 error={
-                  formik.touched.nominal && formik.errors.nominal
+                  formik.errors.nominal && formik.touched.nominal
                     ? formik.errors.nominal
-                    : undefined
+                    : ""
                 }
                 disabled={isLoading}
               />

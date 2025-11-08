@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  selectUserProfile,
-  selectUserBalance,
-  getBalance,
-} from "../../../features/profileSlice";
+import { selectUserBalance, getBalance } from "../../../features/profileSlice";
 import {
   selectServices,
   transaction,
@@ -26,7 +22,6 @@ export default function Payment() {
   const navigate = useNavigate();
   const { serviceCode } = useParams<{ serviceCode: string }>();
 
-  const user = useAppSelector(selectUserProfile);
   const balance = useAppSelector(selectUserBalance);
   const services = useAppSelector(selectServices);
   const transactionStatus = useAppSelector(selectTransactionStatus);
@@ -38,13 +33,6 @@ export default function Payment() {
   const [modalErrorMessage, setModalErrorMessage] = useState<
     string | undefined
   >(undefined);
-
-  const userName = `${user?.first_name || "Pengguna"} ${user?.last_name || ""}`;
-  const userImage =
-    user?.profile_image ===
-    "https://minio.nutech-integrasi.com/take-home-test/null"
-      ? "/Profile Photo.png"
-      : user?.profile_image || "/Profile Photo.png";
 
   const isLoading = transactionStatus === "loading";
 
@@ -88,7 +76,6 @@ export default function Payment() {
 
   const confirmPayment = async () => {
     if (!selectedService || !selectedService.service_tariff) {
-      // This case should ideally not happen if checks are done before opening modal
       setModalErrorMessage("Detail layanan tidak valid.");
       setModalStatus("failed");
       return;
@@ -140,11 +127,7 @@ export default function Payment() {
 
   return (
     <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
-      <ProfileBalance
-        userImage={userImage}
-        userName={userName}
-        balance={balance}
-      />
+      <ProfileBalance />
 
       <div className="mt-8 rounded-sm bg-white p-6 shadow-md">
         <p>Pembayaran</p>
@@ -188,7 +171,7 @@ export default function Payment() {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onConfirm={confirmPayment}
-        service={selectedService as Service} // Cast to Service to ensure type compatibility
+        service={selectedService as Service}
         amount={selectedService.service_tariff}
         status={modalStatus}
         errorMessage={modalErrorMessage}

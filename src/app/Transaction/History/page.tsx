@@ -6,11 +6,7 @@ import {
   selectTransactionHistory,
   selectHistoryStatus,
 } from "../../../features/transactionSlice";
-import {
-  selectUserProfile,
-  selectUserBalance,
-  getBalance,
-} from "../../../features/profileSlice";
+import { selectUserBalance, getBalance } from "../../../features/profileSlice";
 
 import HistoryItem from "../../../components/widgets/HistoryItem";
 import ProfileBalance from "../../../components/widgets/ProfileBalance";
@@ -20,17 +16,9 @@ const LIMIT = 5;
 export default function History() {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector(selectUserProfile);
   const balance = useAppSelector(selectUserBalance);
   const history = useAppSelector(selectTransactionHistory);
   const historyStatus = useAppSelector(selectHistoryStatus);
-
-  const userName = `${user?.first_name || "Pengguna"} ${user?.last_name || ""}`;
-  const userImage =
-    user?.profile_image ===
-    "https://minio.nutech-integrasi.com/take-home-test/null"
-      ? "/Profile Photo.png"
-      : user?.profile_image || "/Profile Photo.png";
 
   const isLoading = historyStatus === "loading";
   const isFirstLoad = historyStatus === "idle" && history.length === 0;
@@ -65,11 +53,7 @@ export default function History() {
 
   return (
     <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
-      <ProfileBalance
-        userImage={userImage}
-        userName={userName}
-        balance={balance}
-      />
+      <ProfileBalance />
       <div className="mt-8">
         <h2 className="mb-4 text-2xl font-semibold text-gray-800">
           Semua Transaksi

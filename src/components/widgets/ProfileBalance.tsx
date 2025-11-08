@@ -1,16 +1,21 @@
+import { useAppSelector } from "../../store/hooks";
+import {
+  selectUserProfile,
+  selectUserBalance,
+} from "../../features/profileSlice";
 import BalanceCard from "./BalanceCard";
 
-interface ProfileBalanceProps {
-  userImage?: string;
-  userName?: string;
-  balance?: number | null;
-}
+export default function ProfileBalance() {
+    const user = useAppSelector(selectUserProfile);
+    const balance = useAppSelector(selectUserBalance);
+  
+    const userName = `${user?.first_name || "Pengguna"} ${user?.last_name || ""}`;
+    const userImage =
+      user?.profile_image ===
+      "https://minio.nutech-integrasi.com/take-home-test/null"
+        ? "/Profile Photo.png"
+        : user?.profile_image || "/Profile Photo.png";
 
-export default function ProfileBalance({
-  userImage,
-  userName,
-  balance,
-}: ProfileBalanceProps) {
   return (
     <div className="mb-8 block w-full justify-between gap-8 lg:flex">
       <div className="mx-auto flex flex-col items-center text-center lg:mx-0 lg:items-start lg:text-left">

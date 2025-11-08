@@ -29,13 +29,6 @@ export default function Home() {
   const services = useAppSelector(selectServices);
   const banners = useAppSelector(selectBanners);
 
-  const userName = `${user?.first_name || ""} ${user?.last_name || "Pengguna"}`;
-  const userImage =
-    user?.profile_image ===
-    "https://minio.nutech-integrasi.com/take-home-test/null"
-      ? "/Profile Photo.png"
-      : user?.profile_image || "/Profile Photo.png";
-
   useEffect(() => {
     if (!user) {
       dispatch(getProfile());
@@ -67,11 +60,7 @@ export default function Home() {
 
   return (
     <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
-      <ProfileBalance
-        userImage={userImage}
-        userName={userName}
-        balance={balance}
-      />
+      <ProfileBalance />
       <ServiceIcon services={services} onClick={handleServiceClick} />
       <PromoBanner banners={banners} />
     </div>
