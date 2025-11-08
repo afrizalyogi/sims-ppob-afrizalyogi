@@ -80,7 +80,7 @@ export default function Login() {
           </div>
 
           <form className="space-y-6" onSubmit={formik.handleSubmit}>
-            <div className="space-y-4 rounded-md shadow-sm">
+            <div className="space-y-4 rounded-md">
               <Input
                 id="email"
                 type="email"
