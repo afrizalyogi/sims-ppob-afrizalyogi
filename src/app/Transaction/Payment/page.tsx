@@ -129,7 +129,7 @@ export default function Payment() {
     <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
       <ProfileBalance />
 
-      <div className="mt-8 rounded-sm bg-white p-6 shadow-md">
+      <div className="mt-8">
         <p>Pembayaran</p>
         <div className="mt-2 mb-8 flex items-center gap-2">
           {selectedService.service_icon && (
