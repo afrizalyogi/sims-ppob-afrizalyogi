@@ -5,6 +5,7 @@ import {
   getHistory,
   selectTransactionHistory,
   selectHistoryStatus,
+  selectTransactionStatus,
 } from "../../../features/transactionSlice";
 import { selectUserBalance, getBalance } from "../../../features/profileSlice";
 
@@ -19,6 +20,7 @@ export default function History() {
   const balance = useAppSelector(selectUserBalance);
   const history = useAppSelector(selectTransactionHistory);
   const historyStatus = useAppSelector(selectHistoryStatus);
+  const transactionStatus = useAppSelector(selectTransactionStatus);
 
   const isLoading = historyStatus === "loading";
   const isFirstLoad = historyStatus === "idle" && history.length === 0;
@@ -40,6 +42,12 @@ export default function History() {
     }
   }, [isFirstLoad, dispatch, balance, loadHistory]);
 
+  useEffect(() => {
+    if (transactionStatus === "succeeded") {
+      loadHistory(0);
+    }
+  }, [transactionStatus, loadHistory]);
+
   const handleShowMore = () => {
     const newOffset = history.length;
     loadHistory(newOffset);
@@ -55,15 +63,15 @@ export default function History() {
     <div className="mx-auto w-full max-w-7xl p-4 md:p-8">
       <ProfileBalance />
       <div className="mt-8">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-800">
+        <h2 className="mb-4 text-xl font-semibold text-gray-800 sm:text-2xl">
           Semua Transaksi
         </h2>
 
         {history.length > 0 ? (
           <>
             <div className="space-y-4">
-              {history.map((item, index) => (
-                <HistoryItem key={index} item={item} />
+              {history.map((item) => (
+                <HistoryItem key={item.invoice_number} item={item} />
               ))}
             </div>
 

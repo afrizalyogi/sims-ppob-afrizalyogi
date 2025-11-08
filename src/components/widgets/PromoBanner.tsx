@@ -14,7 +14,7 @@ export default function PromoBanner({ banners }: PromoBannerProps) {
 
   return (
     <div className="mt-8">
-      <h2 className="mb-4 text-xl font-semibold text-gray-800">
+      <h2 className="mb-4 text-lg font-semibold text-gray-800 sm:text-xl">
         Temukan promo menarik
       </h2>
 

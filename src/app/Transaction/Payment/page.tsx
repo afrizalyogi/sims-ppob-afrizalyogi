@@ -93,7 +93,7 @@ export default function Payment() {
     if (transaction.fulfilled.match(resultAction)) {
       setModalStatus("success");
       dispatch(clearTransactionStatus());
-      dispatch(getBalance()); // Refresh balance after successful transaction
+      dispatch(getBalance());
     } else if (transaction.rejected.match(resultAction)) {
       setModalErrorMessage(
         (resultAction.payload as string) || "Terjadi kesalahan.",
@@ -107,9 +107,9 @@ export default function Payment() {
     setIsModalOpen(false);
     setModalErrorMessage(undefined);
     if (modalStatus === "success" || modalStatus === "failed") {
-      navigate("/"); // Navigate to home after success or failure
+      navigate("/");
     }
-    dispatch(clearTransactionStatus()); // Clear transaction status on modal close
+    dispatch(clearTransactionStatus());
   };
 
   if (!selectedService) {
@@ -175,6 +175,7 @@ export default function Payment() {
         amount={selectedService.service_tariff}
         status={modalStatus}
         errorMessage={modalErrorMessage}
+        isLoading={isLoading}
       />
     </div>
   );

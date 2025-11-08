@@ -115,7 +115,7 @@ export default function Profile() {
           <Edit width={2} height={2} />
         </div>
         <div
-          className={`${!isEditing || isUpdating ? "" : "cursor-pointer"} relative h-32 w-32 overflow-hidden rounded-full border-2 border-gray-200`}
+          className={`${!isEditing || isUpdating ? "" : "cursor-pointer"} relative mb-4 h-20 w-20 overflow-hidden rounded-full border-2 border-gray-200 sm:h-32 sm:w-32`}
           onClick={() => isEditing && fileInputRef.current?.click()}
           title={isEditing ? "Klik untuk mengubah foto" : ""}
         >
@@ -127,7 +127,7 @@ export default function Profile() {
                 : user?.profile_image || "/Profile Photo.png"
             }
             alt="Profile"
-            className="h-full w-full object-cover"
+            className="mb-4 h-20 w-20 rounded-full object-cover shadow-sm"
           />
           <div
             className={`${!isEditing || isUpdating ? "hidden" : ""} absolute inset-0 flex items-center justify-center bg-black text-xl text-white opacity-0 transition duration-300 hover:opacity-20`}
@@ -135,8 +135,10 @@ export default function Profile() {
             {isUpdating ? "..." : "Ganti"}
           </div>
         </div>
-
-        <h2 className="mt-4 text-xl font-semibold">{`${user.first_name} ${user.last_name}`}</h2>
+        <h1 className="text-center text-lg font-medium text-gray-800 sm:text-xl lg:text-left">
+          Selamat datang,
+        </h1>
+        <h2 className="text-xl font-semibold">{`${user.first_name} ${user.last_name}`}</h2>
       </div>
 
       <form

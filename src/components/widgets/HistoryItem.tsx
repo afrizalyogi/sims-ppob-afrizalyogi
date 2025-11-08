@@ -27,7 +27,7 @@ export default function HistoryItem({ item }: HistoryItemProps) {
   });
 
   return (
-    <div className="flex items-center justify-between rounded-sm border border-gray-200 p-6">
+    <div className="flex flex-col justify-between gap-2 rounded-sm border border-gray-200 p-4 sm:flex sm:flex-row sm:items-center sm:p-6">
       <div className="min-w-0 flex-1">
         <p className={`font-semibold ${amountColor}`}>
           {amountSign} Rp{item.total_amount.toLocaleString("id-ID")}
@@ -36,7 +36,7 @@ export default function HistoryItem({ item }: HistoryItemProps) {
           {dateDisplay} | {timeDisplay}
         </p>
       </div>
-      <div className="text-right">
+      <div className="text-left sm:text-right">
         <p className="text-sm font-medium text-gray-700">{item.description}</p>
       </div>
     </div>

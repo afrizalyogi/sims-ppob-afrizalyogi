@@ -7,15 +7,9 @@ import {
 
 interface BalanceCardProps {
   balance: number | null;
-  userName: string;
-  showFullName?: boolean;
 }
 
-export default function BalanceCard({
-  balance,
-  userName,
-  showFullName = true,
-}: BalanceCardProps) {
+export default function BalanceCard({ balance }: BalanceCardProps) {
   const dispatch = useAppDispatch();
   const isBalanceVisible = useAppSelector(selectIsBalanceVisible);
 
@@ -30,33 +24,29 @@ export default function BalanceCard({
 
   return (
     <div className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-xl text-white shadow-xl">
-      <div className="absolute top-0 right-0">
+      <div className="absolute top-0 right-0 h-full w-full">
         <img
           src="/Background Saldo.png"
           alt=""
-          className="hidden h-full w-full lg:block"
+          className="h-full w-full object-cover object-right"
         />
       </div>
 
-      <div className="z-10 flex flex-col items-start gap-2 bg-red-500 p-6 lg:bg-transparent">
+      <div className="z-10 flex flex-col items-start gap-2 p-6 lg:bg-transparent">
         <p className="text-sm font-light">Saldo anda</p>
-        <h2 className="text-4xl font-bold tracking-wide">
+        <h2 className="text-2xl font-bold sm:text-4xl">
           {!isBalanceVisible || balance === null
             ? "Rp •••••••"
             : `Rp ${formatBalance(balance || 0)}`}
         </h2>
 
         <button
-          className="mt-3 cursor-pointer text-xs opacity-80 transition hover:opacity-100"
+          className="cursor-pointer text-xs opacity-80 transition hover:opacity-100 sm:mt-3"
           onClick={handleHidden}
         >
-          Lihat Saldo
+          {!isBalanceVisible ? "Lihat Saldo" : "Sembunyikan Saldo"}
         </button>
       </div>
-
-      {showFullName && (
-        <p className="z-10 text-sm font-medium">Selamat datang, {userName}</p>
-      )}
     </div>
   );
 }
